@@ -40,12 +40,12 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.stream()
-                .map(role->new SimpleGrantedAuthority(role.name())).toList();
+                .map(role->new SimpleGrantedAuthority("ROLE_" + role.name().toUpperCase())).toList();
     }
 
     @Override
     public String getUsername(){
-        return username;
+        return email;
     }
 
     @Override
@@ -74,5 +74,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    public String getActualUsername() {
+        return username;
     }
 }

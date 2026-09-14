@@ -52,18 +52,23 @@ public UserResponseDto getUserById(Long id){
 //updating user and returning response
 
 public UserResponseDto updateUser(Long id, UpdateUserRequestDto request){
+
        var  user =  userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user not found") );
 
-       if(request.getUsername() != null && !request.getUsername().isBlank() ){
-if(request.getUsername().equals(user.getUsername())){
+
+
+    if(request.getUsername() != null && !request.getUsername().isBlank() ){
+        var trimmedUsername = request.getUsername().trim();
+
+        if(trimmedUsername.equalsIgnoreCase(user.getActualUsername())){
     throw new DuplicateUsernameException("cannot change to the same username:" + request.getUsername() );
 }
-if(userRepository.findByUsername(request.getUsername()).isPresent()){
+if(userRepository.findByUsername(trimmedUsername).isPresent()){
     throw new DuplicateUsernameException("username already taken");
 }
 
 
-user.setUsername(request.getUsername());
+user.setUsername(trimmedUsername);
        }
 
 
@@ -104,7 +109,7 @@ if(request.getPassword() != null && !request.getPassword().isBlank() ){
         return UserResponseDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .username(user.getUsername())
+                .username(user.getActualUsername())
                 .roles(user.getRole())
                 .build();
     }

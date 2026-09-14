@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String secreteKey ="480fb56844d04018d5d11bf3848ba84525c2aa74b3c25d74422f72d73f8dad86";
+    @Value("${application.security.jwt.secrete-key}")
+private String secreteKey;
 
     //the claims::getSubject is a method in the claims interface the claims interface has other methods like getExpirationDate etc
 

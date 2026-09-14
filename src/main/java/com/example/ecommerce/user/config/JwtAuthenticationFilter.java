@@ -62,6 +62,7 @@ if(jwtService.isTokenValid(jwt,userDetails)){
 
 }
 
+filterChain.doFilter(request,response);
 
 
     }
