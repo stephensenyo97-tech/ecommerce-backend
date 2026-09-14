@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 
 public class RegisterRequest {
     @NotBlank(message = "username is required")
+    @Size(min = 3, max =50, message = "username must be between 2 and 51")
     private String username;
 
     @Email(message = "invalid email format")
@@ -23,7 +24,7 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank(message =  "password is required")
-    @Size(min=8, message = "password cannot be less than 8 characters")
+    @Size(min=8,  max= 72, message = "password cannot be less than 8 characters")
     private String password;
 
 }

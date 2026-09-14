@@ -1,14 +1,10 @@
 package com.example.ecommerce.user.service;
 
-import com.example.ecommerce.common.exception.DuplicateEmailException;
 import com.example.ecommerce.common.exception.DuplicateUsernameException;
 import com.example.ecommerce.common.exception.SamePasswordException;
-import com.example.ecommerce.common.exception.UnauthorizedActionException;
 import com.example.ecommerce.common.exception.UserNotFoundException;
 import com.example.ecommerce.user.dto.UpdateUserRequestDto;
-import com.example.ecommerce.user.dto.UserRegistrationDto;
 import com.example.ecommerce.user.dto.UserResponseDto;
-import com.example.ecommerce.user.entity.Role;
 import com.example.ecommerce.user.entity.User;
 import com.example.ecommerce.user.repository.UserRepository;
 
@@ -16,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
