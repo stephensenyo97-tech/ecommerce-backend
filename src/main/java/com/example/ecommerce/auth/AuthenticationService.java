@@ -34,11 +34,12 @@ public class AuthenticationService {
         String firstname = request.getFirstname().trim();
         String lastname = request.getLastname().trim();
 
-    var username = firstname.toLowerCase().concat(lastname.toLowerCase());
+    var baseUsername = firstname.toLowerCase().concat(lastname.toLowerCase());
         int count = 1;
 
+        String username = baseUsername;
         while(userRepository.findByUsername(username).isPresent()){
-            username = username + count;
+            username = baseUsername + count;
 
             count ++;
 
@@ -46,8 +47,8 @@ public class AuthenticationService {
 
     var user = User.builder()
             .username(username)
-            .fistname(request.getFirstname())
-            .lastname(request.getLastname())
+            .firstname(firstname)
+            .lastname(lastname)
             .email(request.getEmail())
             .password(passwordEncoder.encode(request.getPassword()))
             .build();
