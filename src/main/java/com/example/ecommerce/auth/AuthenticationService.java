@@ -31,12 +31,23 @@ public class AuthenticationService {
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new DuplicateEmailException("email already taken " + request.getEmail());
         }
-        if(userRepository.findByUsername(request.getUsername()).isPresent()){
-            throw new DuplicateUsernameException("username already taken " + request.getUsername());
+        String firstname = request.getFirstname().trim();
+        String lastname = request.getLastname().trim();
+
+    var username = firstname.toLowerCase().concat(lastname.toLowerCase());
+        int count = 1;
+
+        while(userRepository.findByUsername(username).isPresent()){
+            username = username + count;
+
+            count ++;
+
         }
 
     var user = User.builder()
-            .username(request.getUsername())
+            .username(username)
+            .fistname(request.getFirstname())
+            .lastname(request.getLastname())
             .email(request.getEmail())
             .password(passwordEncoder.encode(request.getPassword()))
             .build();
