@@ -2,7 +2,6 @@ package com.example.ecommerce.auth;
 
 
 import com.example.ecommerce.common.exception.DuplicateEmailException;
-import com.example.ecommerce.common.exception.DuplicateUsernameException;
 import com.example.ecommerce.common.exception.UserNotFoundException;
 import com.example.ecommerce.user.config.JwtService;
 import com.example.ecommerce.user.entity.User;
@@ -54,10 +53,9 @@ public class AuthenticationService {
             .build();
 
 userRepository.save(user);
-var jwtToken = jwtService.generateToken(user);
-    return  AuthenticationResponse.builder()
-            .token(jwtToken)
-            .build();
+var jwt = jwtService.generateToken(user);
+
+    return buildAuthResponse( jwt);
 
     }
 
@@ -71,8 +69,14 @@ var jwtToken = jwtService.generateToken(user);
 
 
 
-        return AuthenticationResponse.builder()
-                                     .token(jwt)
-                                     .build();
+        return buildAuthResponse(jwt);
     }
+
+   private AuthenticationResponse buildAuthResponse(String jwt){
+        return AuthenticationResponse
+                .builder()
+                .token(jwt)
+                .build();
+   }
 }
+

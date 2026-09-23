@@ -30,7 +30,7 @@ public class UserService {
 
 
 List<User> users = userRepository.findAll();
-       return users.stream().map(user -> buildUserResponse(user)).toList();
+       return users.stream().map(this::buildUserResponse).toList();
 
 }
 

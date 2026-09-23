@@ -1,6 +1,6 @@
 package com.example.ecommerce.user.entity;
 
 public enum Role {
-    admin,customer,seller;
+    ROLE_ADMIN,ROLE_CUSTOMER,ROLE_SELLER
 
 }

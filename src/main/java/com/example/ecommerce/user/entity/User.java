@@ -40,13 +40,13 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Builder.Default()
-    private Set<Role> role = new HashSet<>(Set.of(Role.customer));
+    private Set<Role> role = new HashSet<>(Set.of(Role.ROLE_CUSTOMER));
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.stream()
-                .map(role->new SimpleGrantedAuthority("ROLE_" + role.name().toUpperCase())).toList();
+                .map(role->new SimpleGrantedAuthority( role.name())).toList();
     }
 
     @Override
