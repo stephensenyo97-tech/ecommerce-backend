@@ -9,6 +9,7 @@ import com.example.ecommerce.user.entity.User;
 import com.example.ecommerce.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
 
@@ -30,6 +33,7 @@ public class UserService {
 
 
 List<User> users = userRepository.findAll();
+
        return users.stream().map(this::buildUserResponse).toList();
 
 }
@@ -37,6 +41,7 @@ List<User> users = userRepository.findAll();
 
 //get user by id
 public UserResponseDto getUserById(Long id){
+
         var user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("user with id not found: " + id) );
 
 
@@ -51,19 +56,22 @@ public UserResponseDto getUserById(Long id){
 
 //updating user and returning response
 
-public UserResponseDto updateUser(Long id, UpdateUserRequestDto request){
+public UserResponseDto updateUser(UpdateUserRequestDto request){
 
-       var  user =  userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user not found") );
+       var  user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
 
     if(request.getUsername() != null && !request.getUsername().isBlank() ){
+
         var trimmedUsername = request.getUsername().trim();
 
         if(trimmedUsername.equalsIgnoreCase(user.getActualUsername())){
+
     throw new DuplicateUsernameException("cannot change to the same username:" + request.getUsername() );
 }
 if(userRepository.findByUsername(trimmedUsername).isPresent()){
+
     throw new DuplicateUsernameException("username already taken");
 }
 
@@ -74,6 +82,7 @@ user.setUsername(trimmedUsername);
 
 
 if(request.getPassword() != null && !request.getPassword().isBlank() ){
+
      if (passwordEncoder.matches(request.getPassword(),user.getPassword())){
 
          throw new SamePasswordException("cannot change to previous password");
@@ -100,12 +109,15 @@ if(request.getPassword() != null && !request.getPassword().isBlank() ){
 }
 
 
-    public void  deleteUser(Long id){
-        var user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("cannot find user with id " + id) );
-                userRepository.delete(user);
+    public void  deleteUser(){
+
+        var user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+       userRepository.delete(user);
     }
 
     private  UserResponseDto buildUserResponse (User user){
+
         return UserResponseDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())

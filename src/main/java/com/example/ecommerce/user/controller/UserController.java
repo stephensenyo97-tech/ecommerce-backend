@@ -24,7 +24,7 @@ public class UserController {
 
 
 @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers(){
         return ResponseEntity.ok(userService.getUsers());
     }
@@ -35,17 +35,17 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUserById(@PathVariable Long id, @Valid @RequestBody UpdateUserRequestDto request){
-        return ResponseEntity.ok(userService.updateUser(id,request));
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/update")
+    public ResponseEntity<UserResponseDto> updateUser( @Valid @RequestBody UpdateUserRequestDto request){
+        return ResponseEntity.ok(userService.updateUser(request));
     }
 
 
-@PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleterUserById(@PathVariable Long id) {
-        userService.deleteUser(id);
+@PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteUser() {
+        userService.deleteUser();
 
         return ResponseEntity.noContent().build();
     }
