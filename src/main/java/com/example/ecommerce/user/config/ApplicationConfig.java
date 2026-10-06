@@ -44,4 +44,7 @@ private final UserRepository userRepository;
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
+
 }

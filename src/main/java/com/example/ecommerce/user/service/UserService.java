@@ -8,6 +8,7 @@ import com.example.ecommerce.user.dto.UserResponseDto;
 import com.example.ecommerce.user.entity.User;
 import com.example.ecommerce.user.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +29,6 @@ public class UserService {
 
 
 
-//admin gets all users
     public List<UserResponseDto> getUsers(){
 
 
@@ -39,7 +39,6 @@ List<User> users = userRepository.findAll();
 }
 
 
-//get user by id
 public UserResponseDto getUserById(Long id){
 
         var user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("user with id not found: " + id) );
@@ -54,8 +53,7 @@ public UserResponseDto getUserById(Long id){
 }
 
 
-//updating user and returning response
-
+@Transactional
 public UserResponseDto updateUser(UpdateUserRequestDto request){
 
        var  user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
